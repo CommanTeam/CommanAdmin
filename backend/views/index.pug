@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    div(id = "wraper")
+        div(id = "container")
+            nav(id = "topMenu")
+                li( class="navlist" id = "firstButton") 
+                    a( href = url + "/register_instructor" target = "frame" class = "menuLink") 강사 등록하기
+                li( class="navlist" id = "secondButton")
+                    a( href = url target = "frame" class = "menuLink") 바스켓 관리자 추천 순위
+                li( class="navlist" id = "thirdButton")
+                    a( href = url target = "frame" class = "menuLink") 오늘의 추천 카테고리
+                li( class="navlist" id = "fourthButton")
+                    a( href = url target = "frame" class = "menuLink") 카테고리 바스켓 설정    
+            iframe(id = "myframe" src = url + "/register_instructor" name = "frame" width = "700px" height = "500px")

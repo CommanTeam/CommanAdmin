@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    h1 #{title}
+    h3 #{message}
+    form(action="register_instructor", method="POST", enctype="multipart/form-data", id="registerForm")
+        div(class = "wrapper")
+            p
+                |강사명
+            p
+                input(type='text', name="name", placeholder="name")
+            p
+                |이미지 파일 업로드
+            p
+                input(type='file', name="instructorProfile")
+            p
+                input(type='submit', value='등록하기', id="submitBtn")
