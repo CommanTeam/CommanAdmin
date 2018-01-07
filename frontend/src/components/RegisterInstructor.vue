@@ -4,21 +4,11 @@
     <h3> {{message}} </h3>
     <form action = 'register_instructor' method="POST" enctype="multipart/form-data" id="registerForm">
         <div class= "wrapper">
-            <p>
-                강사명
-            </p>
-            <p>
-                <input type='text' name='name' placeholder="강사명"/>
-            </p>
-            <p>
-                이미지 파일 업로드
-            </p>
-            <p>
-                <input type='file' name='instructorProfile'/>
-            </p>
-            <p>
-                <input type='submit' value='등록하기' id="submitBtn"/>
-            </p>
+            <label>강사명</label>
+            <input type='text' name='name' placeholder="강사명"/>
+            <label>이미지 파일 업로드</label>
+	        <input type="file" name='instructorProfile'>
+            <input type='submit' value='등록하기' id="submitBtn"/>
         </div>
     </form>
     </div>
@@ -47,5 +37,3 @@ export default {
   }
 }
 </script>
-<style>
-</style>
