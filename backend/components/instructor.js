@@ -9,10 +9,8 @@ module.exports = {
             conn = await pool.getConnection();
             let query = await conn.query(sql, [name, thumnailPath]);
         } catch(err) {
-            console.log("in catch");
             next(err);
         } finally {
-            console.log("in finally");
             pool.releaseConnection(conn);
         }
     },

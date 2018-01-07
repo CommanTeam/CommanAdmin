@@ -92,4 +92,53 @@ nav {
   overflow: scroll;
   height: 150px;
 }
+
+textarea {
+    width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 5em;
+    resize: vertical;
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: #4777d9;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #0033b1;
+}
+
+label {
+  text-align: left;
+  display: block;
+  padding: 0.5em 1.5em 0.5em 0;
+}
+
+div {
+    border-radius: 5px;
+    padding: 20px;
+}
+
+body {
+    background-color: #f2f2f2;
+}
+
 </style>

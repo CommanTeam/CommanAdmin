@@ -31,4 +31,10 @@ router.get('/register_course', asyncMiddleware( async (req, res, next) => {
   res.status(200).send(result);
 }));
 
+router.post('/register_course', uploadServiceWithResize(640, 640, 'course_thumnail.png').single('courseThumbnail'),
+  asyncMiddleware(async (req, res, next) => {
+    await course.insertCourse(req.body, req.file.transforms[0].location);
+    res.sendStatus(200);
+}));
+
 module.exports = router;
