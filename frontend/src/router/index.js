@@ -13,7 +13,7 @@ export default new Router({
       component: RegisterInstructor
     },
     {
-      path: '/register_course',
+      path: '/course',
       name: 'RegisterCourse',
       component: RegisterCourse
     }

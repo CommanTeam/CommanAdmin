@@ -4,7 +4,7 @@
       <p v-bind:key="currInstructor.id">
         현재 강사: {{currInstructor.name}}
       </p>
-      <p v-if="instructorSelected"> 강사 목록</p>
+      <p v-if="!instructorSelected"> 강사 목록</p>
       <nav class="vertical-menu" v-if="!instructorSelected">
         <button v-on:click="selectInstructor(instructor)" 
                 v-for="instructor in instructorList" 
@@ -14,8 +14,10 @@
       </nav>
       <button v-on:click="showList()"
               v-if="instructorSelected">다시 고르기</button>
-      <header-bar></header-bar>
-      <router-view v-bind:currInstructor="currInstructor"></router-view>
+      <div v-if="instructorSelected">
+        <header-bar></header-bar>
+        <router-view v-bind:currInstructor="currInstructor"></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -111,7 +113,7 @@ input[type=text], select {
     box-sizing: border-box;
 }
 
-input[type=submit] {
+input[type=submit], button {
     width: 100%;
     background-color: #4777d9;
     color: white;
@@ -141,4 +143,8 @@ body {
     background-color: #f2f2f2;
 }
 
+.list-elem {
+  border: 2px solid gray;
+  border-radius: 5px;
+}
 </style>

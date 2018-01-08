@@ -25,16 +25,21 @@ router.post('/register_instructor', uploadServiceWithResize(640, 640, 'instructo
     res.sendStatus(200);
 }));
 
-router.get('/register_course', asyncMiddleware( async (req, res, next) => {
+router.get('/course', asyncMiddleware( async (req, res, next) => {
   let id = req.query.id;
   let result = await course.selectCourse(id);
   res.status(200).send(result);
 }));
 
-router.post('/register_course', uploadServiceWithResize(640, 640, 'course_thumnail.png').single('courseThumbnail'),
+router.post('/course/register', uploadServiceWithResize(640, 640, 'course_thumnail.png').single('courseThumbnail'),
   asyncMiddleware(async (req, res, next) => {
     await course.insertCourse(req.body, req.file.transforms[0].location);
     res.sendStatus(200);
+}));
+
+router.get('/course/chapter', asyncMiddleware( async (req, res, next) => {
+  let result = await course.selectChapter(req.query.id)
+  res.status(200).send(result);
 }));
 
 module.exports = router;
