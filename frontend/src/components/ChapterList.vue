@@ -8,16 +8,28 @@
          <label>단원 설명: {{chapter.info}} </label>
          <label>단원 순서: {{chapter.priority}} </label>
          <button v-on:click="selectChapter(chapter)">단원 선택하기</button>
+         <lecture-list v-if="selectedChapter"
+                       v-bind:selectedChapter="selectedChapter"
+                       v-on:closeForm="closeForm"></lecture-list>
     </div>
   </div>
 </template>
 
 <script>
-
 import axios from 'axios'
+import LectureList from './LectureList.vue'
 export default {
 
+  components: {
+    LectureList
+  },
+
+  created () {
+    this.$parent.$on('refresh', this.getChapter)
+  },
+
   props: ['selectedCourse'],
+
   watch: {
     selectedCourse (course) {
       axios.get(`/course/chapter?id=${this.selectedCourse.id}`)
@@ -29,9 +41,33 @@ export default {
         })
     }
   },
+
   data () {
     return {
-      chapterList: []
+      chapterList: [],
+      selectedChapter: null
+    }
+  },
+
+  methods: {
+    getChapter () {
+      axios.get(`/course/chapter?id=${this.selectedCourse.id}`)
+        .then((res) => {
+          this.chapterList = res.data.chapterList
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    selectChapter (chapter) {
+      if (this.selectedChapter) {
+        this.selectedChapter = null
+      } else {
+        this.selectedChapter = chapter
+      }
+    },
+    closeForm () {
+      this.selectedChapter = null
     }
   }
 }
