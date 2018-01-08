@@ -1,7 +1,6 @@
 import * as axios from 'axios'
 
-function upload (formData) {
-  const url = `/register_course`
+function upload (formData, url) {
   return axios.post(url, formData)
     .then(res => {})
 }
