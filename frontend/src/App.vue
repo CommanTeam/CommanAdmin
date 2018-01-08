@@ -39,7 +39,4 @@ a {
   color: #42b983;
 }
 
-.main-container {
-  margin-bottom: 200px;
-}
 </style>

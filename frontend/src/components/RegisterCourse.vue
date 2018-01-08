@@ -4,15 +4,15 @@
     <p> 강사명 : {{currInstructor.name}}
     </p>
     <p>강좌 검색 결과 </p>
-      <nav class="vertical-menu" v-if="courseExist">
-        <button v-on:click="getRegisteredChapter()" 
+      <nav class="vertical-menu" v-if="courseList.length > 0">
+        <button v-on:click="selectCourse(course)" 
               v-for="course in courseList" 
               v-bind:key="course.id">
               {{course.title}}
         </button>
       </nav>
       <h3> 강좌를 추가해주세요 </h3>
-      <form enctype="multipart/form-data" v-if="!uploadCompleted">
+      <form enctype="multipart/form-data" v-if="addNewCourseFormShowed">
         <label> 강사 ID </label>
         <input type='text' name='id' v-model="currInstructor.id" disabled/>
         <label> 강좌명</label>
@@ -39,35 +39,35 @@
         </select>
         <input type='submit' value='추가하기' v-on:click="addNewCourse"/>
       </form>
-      <div v-if="uploadCompleted">
-        <label>강좌 추가를 완료하였습니다.</label>
-        <button v-on:click="openNewCourseForm" >더 추가하기</button>
+      <div>
+        <button v-on:click="openNewCourseForm" >{{ addNewCourseFormShowed? '접기' : '강좌 추가하기'}}</button>
       </div>
+      <chapter-list v-bind:selectedCourse="selectedCourse"></chapter-list>
   </div>
 </template>
 <script>
 import axios from 'axios'
 import { upload } from '../service/file-upload.service'
+import ChapterList from './ChapterList.vue'
 
 export default {
   created () {
     this.courseExist = false
-    axios.get(`/register_course?id=${this.currInstructor.id}`)
+    axios.get(`/course?id=${this.currInstructor.id}`)
       .then((res) => {
         this.courseList = res.data.courseList
-        if (this.courseList.length > 0) {
-          this.courseExist = true
-        }
       })
       .catch((err) => {
         console.log(err)
       })
   },
+  components: {
+    ChapterList
+  },
   name: 'RegisterCourse',
   data: () => {
     return {
       courseList: [],
-      courseExist: false,
       newCourseTitle: '',
       newCourseIsFree: false,
       newCourseChapterCount: 0,
@@ -84,22 +84,15 @@ export default {
         {id: 7, name: '황혼 프로젝트'}
       ],
       formData: new FormData(),
-      uploadCompleted: false
+      addNewCourseFormShowed: false,
+      selectedCourse: null
     }
   },
   methods: {
-    getRegisteredChapter: () => {
-      axios.get(`/register_course?${name}`)
-        .then((res) => {
-          this.courseList = res.courseList
-          this.courseExist = true
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+    selectCourse (course) {
+      this.selectedCourse = course
     },
     addNewCourse () {
-      console.log(this.formData)
       this.formData.append('supplierID', this.currInstructor.id)
       this.formData.append('title', this.newCourseTitle)
       this.formData.append('isFree', this.newCourseIsFree)
@@ -107,9 +100,10 @@ export default {
       this.formData.append('courseInfo', this.newCourseInfo)
       this.formData.append('coursePrice', this.newCoursePrice)
       this.formData.append('categoryID', this.newCourseCategoryId)
-      upload(this.formData)
+      upload(this.formData, `/course/register`)
         .then(x => {
-          this.uploadCompleted = true
+          alert('강좌 추가를 완료하였습니다.')
+          this.addNewCourseFormShowed = false
           this.formData = new FormData()
         })
         .catch(err => {
@@ -125,18 +119,17 @@ export default {
           this.formData.append(fieldName, fileList[x], fileList[x].name)
         })
     },
-    openNewCourseForm: () => {
-      this.uploadCompleted = false
+    openNewCourseForm () {
+      this.addNewCourseFormShowed = !this.addNewCourseFormShowed
     }
   },
   props: ['currInstructor'],
   watch: {
     currInstructor (instructor) {
       this.currInstructor = instructor
-      axios.get(`/register_course?id=${this.currInstructor.id}`)
+      axios.get(`/course?id=${this.currInstructor.id}`)
         .then((res) => {
           this.courseList = res.data.courseList
-          this.courseExist = true
         })
         .catch((err) => {
           console.log(err)

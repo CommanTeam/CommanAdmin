@@ -42,10 +42,34 @@ module.exports = {
         ]
       );
     } catch(err) {
-      console.log(err);
       next(err);
     } finally {
       pool.releaseConnection(conn);
+    }
+  },
+
+  selectChapter : async (id) => {
+    let sql = `SELECT id, title, info, priority FROM chapter WHERE course_id = ? order by priority asc;`;
+    var conn = null;
+    var result = { chapterList: []};
+    try {
+      conn = await pool.getConnection();
+      var queryResult = await conn.query(sql, [id]) || null;
+      for (var idx in queryResult) {
+        result.chapterList.push(
+          {
+            id: queryResult[idx].id,
+            title: queryResult[idx].title,
+            info: queryResult[idx].info,
+            priority: queryResult[idx].priority
+          }
+        )
+      }
+    } catch (err) {
+      next(err);
+    } finally {
+      pool.releaseConnection(conn);
+      return result;
     }
   }
 }
