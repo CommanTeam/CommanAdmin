@@ -112,7 +112,7 @@ input[type=text], select {
     box-sizing: border-box;
 }
 
-input[type=submit], button {
+input[type=button], button {
     width: 100%;
     background-color: #4777d9;
     color: white;

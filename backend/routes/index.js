@@ -42,4 +42,30 @@ router.get('/course/chapter', asyncMiddleware( async (req, res, next) => {
   res.status(200).send(result);
 }));
 
+router.post('/course/chapter/register', async (req, res, next) => {
+  try {
+    let result = await course.updateChapter(req.body);
+    if (result.isSuccess) {
+      res.status(200).send(result);
+    } else {
+      result.message = 'Database has duplicate records';
+      res.status(500).send(result);
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.get('/course/chapter/lecture', async (req, res, next) => {
+  try {
+    let chapterId = req.query.id;
+    let result = await course.selectLecture(chapterId);
+    res.status(200).send(result);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 module.exports = router;

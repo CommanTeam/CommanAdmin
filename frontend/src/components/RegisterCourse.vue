@@ -54,12 +54,16 @@
         <button v-on:click="openNewCourseForm" >{{ addNewCourseFormShowed? '접기' : '강좌 추가하기'}}</button>
       </div>
       <chapter-list v-bind:selectedCourse="selectedCourse"></chapter-list>
+      <register-chapter v-if="selectedCourse"
+                        v-bind:selectedCourse="selectedCourse"
+                        v-on:updateChapter="refresh"></register-chapter>
   </div>
 </template>
 <script>
 import axios from 'axios'
 import { upload } from '../service/file-upload.service'
 import ChapterList from './ChapterList.vue'
+import RegisterChapter from './RegisterChapter.vue'
 
 export default {
   created () {
@@ -73,7 +77,8 @@ export default {
       })
   },
   components: {
-    ChapterList
+    ChapterList,
+    RegisterChapter
   },
   data: () => {
     return {
@@ -114,12 +119,11 @@ export default {
         .then(x => {
           alert('강좌 추가를 완료하였습니다.')
           this.addNewCourseFormShowed = false
-          this.formData = new FormData()
         })
         .catch(err => {
-          this.formData = new FormData()
           console.log(err)
         })
+      this.formData = new FormData()
     },
     filesChange (fieldName, fileList) {
       if (!fileList.length) return
@@ -131,6 +135,9 @@ export default {
     },
     openNewCourseForm () {
       this.addNewCourseFormShowed = !this.addNewCourseFormShowed
+    },
+    refresh () {
+      this.$emit('refresh')
     }
   },
   props: ['currInstructorC'],
