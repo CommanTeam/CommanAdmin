@@ -3,7 +3,7 @@
     <h1> 강좌를 등록하는 페이지 입니다.</h1>
     <p> 강사명 : {{currInstructorC.name}}
     </p>
-    <p>강좌 검색 결과 </p>
+    <p>강좌 검색 결과 22 </p>
       <nav class="vertical-menu" v-if="courseList.length > 0">
         <button v-on:click="selectCourse(course)" 
               v-for="course in courseList" 

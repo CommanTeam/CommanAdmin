@@ -1,9 +1,10 @@
 <template>
   <div id = "wrapper">
     <div id = "container">
-      <p v-bind:key="currInstructor.id">
-        현재 강사: {{currInstructor.name}}
+      <p v-bind:key="currInstructorData.id">
+        현재 강사: {{currInstructorData.name}}
       </p>
+      
       <p v-if="!instructorSelected"> 강사 목록</p>
       <nav class="vertical-menu" v-if="!instructorSelected">
         <button v-on:click="selectInstructor(instructor)" 
@@ -14,25 +15,23 @@
       </nav>
       <button v-on:click="showList()"
               v-if="instructorSelected">다시 고르기</button>
+
       <div v-if="instructorSelected">
         <header-bar></header-bar>
-        <router-view v-bind:currInstructor="currInstructor"></router-view>
+        <router-view v-bind:currInstructorC="currInstructorData"></router-view>
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import RegisterCourse from './RegisterCourse.vue'
-import RegisterInstructor from './RegisterInstructor.vue'
 import headerBar from './headerBar.vue'
 
 export default {
   components: {
-    headerBar,
-    RegisterCourse,
-    RegisterInstructor
+    headerBar
   },
   created () {
     axios.get(`/instructors`)
@@ -49,13 +48,13 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App',
       instructorList: [],
-      currInstructor: {name: '미정', id: 0},
+      currInstructorData: {name: '미정', id: 0},
       instructorSelected: false
     }
   },
   methods: {
-    selectInstructor (instructor) {
-      this.currInstructor = instructor
+    selectInstructor (_instructor) {
+      this.currInstructorData = _instructor
       this.instructorSelected = true
     },
     showList () {
