@@ -49,5 +49,5 @@ function getUploadServiceWithSize(width, height, fileName) {
     })
 }
 
-module.exports.upload = uploadService
+module.exports.uploadService = uploadService
 module.exports.uploadServiceWithResize = getUploadServiceWithSize

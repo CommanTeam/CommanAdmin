@@ -1,8 +1,12 @@
-<template>
-    <div id = "register_instructor">
-      <h1> 강사 설정하는 페이지 입니다.</h1>
-      <label>강사명</label>
-      <input type='text' v-model="newInstructorName"/>
+<<template>
+  <div>
+    <label>강의 명</label>
+    <input type='text' v-model="lectureTitle"/>
+    <label>강의 설명</label>
+    <input type='text' v-model="lectureInfo"/>
+    <label>강의 순서</label>
+    <input type="text" v-model="lecturePriority"/>
+    <div class="upload">
       <ul>
         <li v-for="(file, index) in pictureFiles" :key="file.id">
           <span>{{file.name}}</span> -
@@ -14,22 +18,31 @@
           <span v-else></span>
         </li>
       </ul>
-      <file-upload
-        class="btn"
-        post-action="/upload/post"
-        extensions="gif,jpg,jpeg,png,webp"
-        accept="image/png,image/gif,image/jpeg,image/webp"
-        :multiple="true"
-        :size="1024 * 1024 * 10"
-        v-model="pictureFiles"
-        @input-filter="inputFilter"
-        @input-file="inputFile"
-        ref="upload">
-        이미지 파일 업로드
-      </file-upload>
-      <button type="button" v-on:click="uploadInstructor">업로드 하기</button>
+      <div class="example-btn">
+        <file-upload
+          class="btn btn-primary"
+          post-action="/upload/post"
+          extensions="gif,jpg,jpeg,png,webp"
+          accept="image/png,image/gif,image/jpeg,image/webp"
+          :multiple="true"
+          :size="1024 * 1024 * 10"
+          v-model="pictureFiles"
+          @input-filter="inputFilter"
+          @input-file="inputFile"
+          ref="upload">
+          이미지 파일 찾기
+        </file-upload>
+        <button type="button" v-on:click="updateLecture">업로드 하기</button>
+      </div>
     </div>
+  </div>  
 </template>
+<style>
+.example-simple label.btn {
+  margin-bottom: 0;
+  margin-right: 1rem;
+}
+</style>
 <script>
 
 import FileUpload from 'vue-upload-component'
@@ -40,10 +53,15 @@ export default {
   },
   data () {
     return {
-      newInstructorName: null,
+      lectureTitle: null,
+      lectureInfo: null,
+      lectureType: 1,
+      lecturePriority: 0,
+      picturePriority: null,
       pictureFiles: []
     }
   },
+  props: ['chapterId'],
   methods: {
     inputFilter (newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
@@ -75,18 +93,20 @@ export default {
         console.log('remove', oldFile)
       }
     },
-    uploadInstructor () {
+    updateLecture () {
       var formData = new FormData()
-      formData.append('name', this.newInstructorName)
-      formData.append('instructorProfile',
-        this.pictureFiles[0].file,
-        this.pictureFiles[0].name)
-      upload(formData, `/instructor`)
+      formData.append('title', this.lectureTitle)
+      formData.append('info', this.lectureInfo)
+      formData.append('priority', this.lecturePriority)
+      formData.append('type', this.lectureType)
+      for (var idx in this.pictureFiles) {
+        formData.append('quizPicture', this.pictureFiles[idx].file, this.pictureFiles[idx].name)
+      }
+      formData.append('chapterId', this.chapterId)
+      upload(formData, `/course/chapter/lecture/picture`)
         .then(x => {
-          alert('강사 추가를 완료하였습니다.')
+          alert('강좌 추가를 완료하였습니다.')
           this.$emit('refresh')
-          this.pictureFiles = []
-          this.newInstructorName = null
         })
         .catch(err => {
           console.log(err)
@@ -95,3 +115,4 @@ export default {
   }
 }
 </script>
+

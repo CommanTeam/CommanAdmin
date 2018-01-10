@@ -16,7 +16,9 @@
               v-if="instructorSelected">다시 고르기</button>
       <div v-if="instructorSelected">
         <header-bar></header-bar>
-        <router-view v-bind:currInstructor="currInstructor"></router-view>
+        <router-view v-bind:currInstructor="currInstructor"
+                     v-on:refresh="refresh">
+        </router-view>
       </div>
     </div>
   </div>
@@ -35,15 +37,7 @@ export default {
     RegisterInstructor
   },
   created () {
-    axios.get(`/instructors`)
-      .then((res) => {
-        this.statusText = res.statusText
-        this.instructorList = res.data.data
-        console.log(res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    this.refresh()
   },
   data () {
     return {
@@ -60,12 +54,21 @@ export default {
     },
     showList () {
       this.instructorSelected = false
+    },
+    refresh () {
+      axios.get(`/instructors`)
+        .then((res) => {
+          this.statusText = res.statusText
+          this.instructorList = res.data.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .vertical-menu {
   margin-bottom: 50px;
@@ -113,7 +116,7 @@ input[type=text], select {
     box-sizing: border-box;
 }
 
-input[type=button], button {
+input[type=button], button, input[type=file] {
     width: 100%;
     background-color: #4777d9;
     color: white;
@@ -146,5 +149,51 @@ body {
 .list-elem {
   border: 2px solid gray;
   border-radius: 5px;
+  font-size: 0.6em;
+  padding: 0.2em;
+}
+
+.list-elem button {
+    width: 50%;
+    background-color: #4777d9;
+    padding: 5px 10px;
+    height: 30px;
+}
+
+.list-elem label {
+  text-align: left;
+  display: block;
+  padding: 0.5em 1em 0.2em 0;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #4777d9;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    background-color: #888;
+}
+
+.btn {
+    background-color: #888;
+    width: 50%;
+    padding: 14px 20px;
 }
 </style>
