@@ -11,6 +11,10 @@
               {{course.title}}
         </button>
       </nav>
+      <chapter-list v-bind:selectedCourse="selectedCourse"></chapter-list>
+      <register-chapter v-if="selectedCourse"
+                        v-bind:selectedCourse="selectedCourse"
+                        v-on:updateChapter="refresh"></register-chapter>
       <h3> 강좌를 추가해주세요 </h3>
       <form enctype="multipart/form-data" v-if="addNewCourseFormShowed">
         <label> 강사 ID </label>
@@ -42,10 +46,7 @@
       <div>
         <button v-on:click="openNewCourseForm" >{{ addNewCourseFormShowed? '접기' : '강좌 추가하기'}}</button>
       </div>
-      <chapter-list v-bind:selectedCourse="selectedCourse"></chapter-list>
-      <register-chapter v-if="selectedCourse"
-                        v-bind:selectedCourse="selectedCourse"
-                        v-on:updateChapter="refresh"></register-chapter>
+
   </div>
 </template>
 <script>
