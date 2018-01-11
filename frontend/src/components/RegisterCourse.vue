@@ -81,13 +81,12 @@ export default {
       newCoursePrice: 0,
       newCourseCategoryId: 1,
       categoryList: [
-        {id: 1, name: '컴퓨터'},
-        {id: 2, name: '모바일'},
-        {id: 3, name: '문서'},
-        {id: 4, name: '인터넷'},
-        {id: 5, name: '프로그래밍'},
-        {id: 6, name: '디자인'},
-        {id: 7, name: '황혼 프로젝트'}
+        {id: 1, name: 'IT 기기 기초'},
+        {id: 2, name: '인터넷'},
+        {id: 3, name: '황혼프로젝트'},
+        {id: 4, name: '디자인 툴'},
+        {id: 5, name: '문서'},
+        {id: 6, name: '프로그래밍'}
       ],
       formData: new FormData(),
       addNewCourseFormShowed: false,
