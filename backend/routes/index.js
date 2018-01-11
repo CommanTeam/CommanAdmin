@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const uploadServiceWithResize = require('../components/upload-service').uploadServiceWithResize;
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'http://localhost:3001';
 const asyncMiddleware = require('./utils/middleware');
 const instructor = require('../components/instructor');
 const course = require('../components/course')
