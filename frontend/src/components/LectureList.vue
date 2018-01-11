@@ -5,10 +5,12 @@
          v-bind:key="lecture.id"
          class='list-elem'>
          <label>강의명: {{lecture.title}} </label>
-         <label>설명: {{lecture.into}} </label>
+         <label>설명: {{lecture.info}} </label>
          <label>강의 타입: {{lecture.typeString}} </label>
          <label>강의 순서: {{lecture.priority}} 번 째 </label>
     </div>
+    <register-lecture v-bind:chapterId="selectedChapter.id"
+                      v-on:refresh="refresh"></register-lecture>
     <button v-on:click="closeList">닫기</button>
   </div>
 </template>
@@ -16,8 +18,11 @@
 <<script>
 
 import axios from 'axios'
-
+import RegisterLecture from './RegisterLecture.vue'
 export default {
+  components: {
+    RegisterLecture
+  },
   created () {
     this.getLectureList()
   },
@@ -50,6 +55,9 @@ export default {
     },
     closeList () {
       this.$emit('closeForm')
+    },
+    refresh () {
+      this.getLectureList()
     }
   },
   props: ['selectedChapter'],

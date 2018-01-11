@@ -7,8 +7,8 @@
          <label>단원 명: {{chapter.title}} </label>
          <label>단원 설명: {{chapter.info}} </label>
          <label>단원 순서: {{chapter.priority}} </label>
-         <button v-on:click="selectChapter(chapter)">단원 선택하기</button>
-         <lecture-list v-if="selectedChapter"
+         <button v-on:click="selectChapter(chapter)">강의 목록보기</button>
+         <lecture-list v-if="chapter == selectedChapter"
                        v-bind:selectedChapter="selectedChapter"
                        v-on:closeForm="closeForm"></lecture-list>
     </div>

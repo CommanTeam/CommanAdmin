@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const uploadServiceWithResize = require('../components/upload-service').uploadServiceWithResize;
+const uploadService = require('../components/upload-service').uploadService;
 const baseUrl = 'http://localhost:3000';
 const asyncMiddleware = require('./utils/middleware');
 const instructor = require('../components/instructor');
@@ -17,7 +18,7 @@ router.get('/instructors', asyncMiddleware( async (req, res, next) => {
   res.status(200).send(result);
 }));
 
-router.post('/register_instructor', uploadServiceWithResize(640, 640, 'instructor_profile.png').single('instructorProfile'), 
+router.post('/instructor', uploadServiceWithResize(640, 640, 'instructor_profile.png').single('instructorProfile'), 
   asyncMiddleware(async (req, res, next) => {
     let name = req.body.name;
     let filePath = req.file.transforms[0].location;
@@ -62,6 +63,96 @@ router.get('/course/chapter/lecture', async (req, res, next) => {
     let chapterId = req.query.id;
     let result = await course.selectLecture(chapterId);
     res.status(200).send(result);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.post('/course/chapter/lecture/video', async (req, res, next) => {
+  try {
+    let result = await course.uploadVideo(req.body);
+    if (result.isSuccess) {
+      res.status(200).send(result);
+    } else {
+      res.status(500).send(result);
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.post('/course/chapter/lecture/picture', uploadService.array('quizPicture', 20), async (req, res, next) => {
+
+  try {
+    var fileLocationList = [];
+    for (var idx in req.files) {
+      fileLocationList.push(req.files[idx].location);
+    }
+
+    let result = await course.uploadPicture(req.body, fileLocationList)
+
+    if (result.isSuccess) {
+      res.status(200).send(result);
+    } else {
+      res.status(500).send(result);
+    }
+
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.get('/course/chapter/lecture/quiz', async (req, res, next) => {
+  try {
+    var chapterId = req.query.chapterId;
+    let result = await course.getQuizLecture(chapterId);
+    res.status(200).send(result);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.post('/course/chapter/lecture/quiz', async (req, res, next) => {
+  try {
+    var body = req.body;
+    let result = await course.uploadQuiz(body);
+    if (result.isSuccess) {
+      res.status(200).send(result);
+    } else {
+      res.status(500).send(result);
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+router.get('/course/chapter/lecture/quiz/question', async (req, res, next) => {
+  try {
+    var lectureId = req.query.lectureId;
+    let result = await course.getQuestionList(lectureId);
+    res.status(200).send(result);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.post('/course/chapter/lecture/quiz/question', uploadService.single('questionPicture'), async (req, res, next) => {
+  try {
+    var fileLocation = null;
+    if (req.file) {
+      fileLocation = req.file.location;
+    }
+    let result = await course.uploadQuestion(req.body, fileLocation);
+    if (result.isSuccess) {
+      res.status(200).send(result);
+    } else {
+      res.status(500).send(result);
+    }
   } catch (err) {
     console.log(err);
     next(err);
